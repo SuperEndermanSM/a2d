@@ -3,35 +3,23 @@
 #### 介绍
 将AppImage程序包转换成Deb软件包。
 
-#### 软件架构
-软件架构说明
-
-
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  git clone https://gitee.com/qygw/a2d
+2.  cd a2d/src
+3.  mkdir build &&cd build
+4.  qmake ..
+5.  make
 
-#### 使用说明
+#### 依赖
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  qt5那一套
+2.  fakeroot
 
-#### 参与贡献
+#### 反馈
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+拙作bug极多，劳烦各位如有遇见，请不吝反馈。
+当然如果有哪位大佬愿意将鄙人代码批评一番，鄙人奉茶相迎（qygwhk@163.com）
 
-
-#### 码云特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5.  码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+#### 唠几句嗑
+作者课业紧张，有些代码有草草了事之嫌，望恕罪（谁说初一学生作业少...）。
