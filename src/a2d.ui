@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>351</width>
-    <height>221</height>
+    <height>211</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -46,7 +46,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>转换</string>
+     <string>构建</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -76,7 +76,7 @@
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgba(255, 255, 255, 0);
-image: url(:/images/DCSlogo.png);</string>
+image: url(:/images/images/DCSlogo.png);</string>
     </property>
     <property name="text">
      <string/>

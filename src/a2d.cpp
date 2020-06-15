@@ -25,6 +25,7 @@ QString Nameand;
 QString Path;
 QString AppimageName;
 QString Version;
+QString IconName;
 int step=1;
 
 A2D::A2D(QWidget *parent)
@@ -32,10 +33,10 @@ A2D::A2D(QWidget *parent)
     , ui(new Ui::A2D)
 {
     ui->setupUi(this);
-    setWindowIcon(QIcon(":/images/Icon.png"));
+    setWindowIcon(QIcon(":/images/images/Icon.png"));
     setWindowOpacity(1);
     setAttribute(Qt::WA_TranslucentBackground);
-    ui->label->setPixmap(QIcon(":/images/builder.png").pixmap(135,135));
+    ui->label->setPixmap(QIcon(":/images/images/builder.png").pixmap(135,135));
     ui->notify->setText("拖拽文件至左侧");
     ui->lineEdit_2->setPlaceholderText("输入软件版本");
     ui->progressBar->setValue(0);
@@ -100,10 +101,10 @@ void A2D::unpackAppimage(QString filePath)
             ui->label->setPixmap(QPixmap::fromImage(QImage("/tmp/squashfs-root/"+pngname[0])));
             QFileInfo Icon;
             Icon=QFileInfo("/tmp/squashfs-root/"+pngname[0]);
+            IconName="/tmp/squashfs-root/"+pngname[0];
             Name=Icon.baseName();
             ui->lineEdit->setText(Name);
-            ui->notify->setText("开始构建目录");
-            Version=ui->lineEdit_2->text();
+            ui->notify->setText("解析完毕");
             ui->progressBar->setValue(40);
         }else {
             QString svgPath = "/tmp/squashfs-root/"+pngname[0].toUtf8();
@@ -134,6 +135,8 @@ void A2D::on_pushButton_clicked(bool checked)
     else
     {
         ui->pushButton->setEnabled(false);
+        ui->notify->setText("构建目录中");
+        Version=ui->lineEdit_2->text();
         mkdirAllDirs();
         ui->progressBar->setValue(60);
         MoveFiles(AppimageName);
@@ -161,20 +164,13 @@ void A2D::mkdirAllDirs()
     mkdir->waitForFinished();
     mkdir->start("mkdir /tmp/"+Name+"/DEBIAN");
     mkdir->waitForFinished();
-    if (isDirExist("/tmp/squashfs-root/usr/share/applications"))
-    {
-        return;
-    }
-    else
-    {
-        mkdir->start("mkdir /tmp/"+Name+"/usr");
-        mkdir->waitForFinished();
-        mkdir->start("mkdir /tmp/"+Name+"/usr/share");
-        mkdir->waitForFinished();
-        mkdir->start("mkdir /tmp/"+Name+"/usr/share/applications");
-        mkdir->waitForFinished();
-        mkdir->close();
-    }
+    mkdir->start("mkdir /tmp/"+Name+"/usr/");
+    mkdir->waitForFinished();
+    mkdir->start("mkdir /tmp/"+Name+"/usr/share");
+    mkdir->waitForFinished();
+    mkdir->start("mkdir /tmp/"+Name+"/usr/share/applications");
+    mkdir->waitForFinished();
+    mkdir->start("mkdir /tmp/"+Name+"/usr/share/icons");
     ui->notify->setText("移入文件中");
 }
 bool A2D::isDirExist(QString fullPath)
@@ -199,20 +195,20 @@ void A2D::MoveFiles(QString AppimageName)
     moveAppImage->waitForFinished();
     moveAppImage->close();
     QProcess *moveDesktop= new QProcess();
-    if(isDirExist("/tmp/squashfs-root/usr/share/applications"))
+    moveDesktop->start("cp -a /tmp/squashfs-root/usr/share/applications /tmp/"+Name+"/usr/share/");
+    moveDesktop->waitForFinished();
+    moveDesktop->start("cp -a /tmp/squashfs-root/usr/share/applications /tmp/"+Name+"/usr/share/");
+    moveDesktop->waitForFinished();
+    if (isDirExist("/tmp/squashfs-root/usr/share/icons"))
     {
-        moveDesktop->start("cp -a /tmp/squashfs-root/usr /tmp/"+Name);
-        moveDesktop->waitForFinished();
-        moveDesktop->start("rm -rf /tmp/"+Name+"/usr/lib");
+        moveDesktop->start("cp -a /tmp/squashfs-root/usr/share/icons /tmp/"+Name+"/usr/share/");
         moveDesktop->waitForFinished();
     }
     else
     {
-        moveDesktop->start("cp -a /tmp/squashfs-root/"+Name+".desktop "+"/tmp/"+Name+"/usr/share/applications");
+        moveDesktop->start("mkdir /tmp/"+Name+"/usr/share/icons/hicolor &&mkdir /tmp/"+Name+"/usr/share/icons/hicolor/512x512/ &&mkdir /tmp/"+Name+"/usr/share/icons/hicolor/512x512/apps");
         moveDesktop->waitForFinished();
-        moveDesktop->start("cp -a /tmp/squashfs-root/usr /tmp/"+Name);
-        moveDesktop->waitForFinished();
-        moveDesktop->start("rm -rf /tmp/"+Name+"/usr/lib");
+        moveDesktop->start("cp -a "+IconName+" /tmp/"+Name+"/usr/share/icons/hicolor/512x512/apps/");
         moveDesktop->waitForFinished();
     }
     moveDesktop->close();

@@ -1,11 +1,7 @@
 <RCC>
     <qresource prefix="/images">
-        <file>up2.png</file>
-        <file>up.png</file>
-        <file>down2.png</file>
-        <file>down.png</file>
-        <file>DCSlogo.png</file>
-        <file>Icon.png</file>
-        <file>builder.png</file>
+        <file>images/builder.png</file>
+        <file>images/DCSlogo.png</file>
+        <file>images/Icon.png</file>
     </qresource>
 </RCC>
