@@ -206,7 +206,7 @@ void A2D::MoveFiles(QString AppimageName)
     }
     else
     {
-        moveDesktop->start("mkdir /tmp/"+Name+"/usr/share/icons/hicolor &&mkdir /tmp/"+Name+"/usr/share/icons/hicolor/512x512/ &&mkdir /tmp/"+Name+"/usr/share/icons/hicolor/512x512/apps");
+        moveDesktop->start("mkdir /tmp/"+Name+"/usr/share/icons/hicolor /tmp/"+Name+"/usr/share/icons/hicolor/512x512/ /tmp/"+Name+"/usr/share/icons/hicolor/512x512/apps");
         moveDesktop->waitForFinished();
         moveDesktop->start("cp -a "+IconName+" /tmp/"+Name+"/usr/share/icons/hicolor/512x512/apps/");
         moveDesktop->waitForFinished();
