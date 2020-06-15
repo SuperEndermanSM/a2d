@@ -28,6 +28,7 @@ public:
 
 private slots:
     void on_pushButton_clicked(bool checked);
+    QStringList getFileNames(const QString &path);
 
 private:
     Ui::A2D *ui;

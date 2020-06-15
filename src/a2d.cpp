@@ -134,6 +134,7 @@ void A2D::on_pushButton_clicked(bool checked)
     }
     else
     {
+        Name=ui->lineEdit->text();
         ui->pushButton->setEnabled(false);
         ui->notify->setText("构建目录中");
         Version=ui->lineEdit_2->text();
@@ -195,14 +196,15 @@ void A2D::MoveFiles(QString AppimageName)
     moveAppImage->waitForFinished();
     moveAppImage->close();
     QProcess *moveDesktop= new QProcess();
-    moveDesktop->start("cp -a /tmp/squashfs-root/usr/share/applications /tmp/"+Name+"/usr/share/");
-    moveDesktop->waitForFinished();
-    moveDesktop->start("cp -a /tmp/squashfs-root/usr/share/applications /tmp/"+Name+"/usr/share/");
+    QStringList Desktop=getFileNames("/tmp/squashfs-root/usr/share/applications");
+    qDebug()<<"/tmp/squashfs-root/ "+Desktop[0];
+    moveDesktop->start("mv /tmp/squashfs-root/usr/share/applications/"+Desktop[0]+" /tmp/"+Name+"/usr/share/applications/"+Name+".desktop");
     moveDesktop->waitForFinished();
     if (isDirExist("/tmp/squashfs-root/usr/share/icons"))
     {
-        moveDesktop->start("cp -a /tmp/squashfs-root/usr/share/icons /tmp/"+Name+"/usr/share/");
+        moveDesktop->start("mv /tmp/squashfs-root/usr/share/icons /tmp/"+Name+"/usr/share");
         moveDesktop->waitForFinished();
+        qDebug()<<"2";
     }
     else
     {
@@ -210,10 +212,11 @@ void A2D::MoveFiles(QString AppimageName)
         moveDesktop->waitForFinished();
         moveDesktop->start("cp -a "+IconName+" /tmp/"+Name+"/usr/share/icons/hicolor/512x512/apps/");
         moveDesktop->waitForFinished();
+        qDebug()<<"1";
     }
     moveDesktop->close();
     QProcess *rewriteDesktop = new QProcess();
-    rewriteDesktop->start("sed -i \"/AppRun/d\" /tmp/"+Name+"/usr/share/applications/"+Name+".desktop");
+    rewriteDesktop->start("sed -i \"/Exec/d\" /tmp/"+Name+"/usr/share/applications/"+Name+".desktop");
     rewriteDesktop->waitForFinished();
     rewriteDesktop->close();
     QFile file("/tmp/"+Name+"/usr/share/applications/"+Name+".desktop");
@@ -269,4 +272,13 @@ void A2D::MakeDeb()
     rm->close();
     ui->notify->setText("打包完毕");
     ui->progressBar->setValue(100);
+}
+QStringList A2D::getFileNames(const QString &path)
+{
+    QDir dir(path);
+    QStringList nameFilters;
+    nameFilters << "*.desktop";
+    QStringList files = dir.entryList(nameFilters, QDir::Files|QDir::Readable, QDir::Name);
+    qDebug() <<files;
+    return files;
 }
